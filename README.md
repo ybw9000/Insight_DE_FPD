@@ -11,9 +11,9 @@ The core idea is how to efficiently query the median in a streamed data. This al
 
 1. Initialize two empty heaps ("min heap"), say `left` and `right`. `left` always has the same length of or one more element than `right`, i.e., len(left) = len(right) or len(left) = len(right) + 1. With two empty heaps, this is satisfied.
 
-2. Each time when a streamed value `num` comes in, we push it into `right` if len(left) == len(right); otherwise (len(left) == len(right) + 1) we push `-num` into `left`. Then we pop the top element `heap[0]` from that heap and push `-heap[0]` into the other heap. The negative sign just makes `left` serve as a "max heap". This way ensures that all the `num` in `left` are no greater than all the `num` in `right` as well as the above length condition. This insert takes O(log(n)).
+2. Each time when a streamed value `num` comes in, we push it into `right` if `len(left) == len(right)`; otherwise we push `-num` into `left`. Then we pop the top element `heap[0]` from that heap and push `-heap[0]` into the other heap. The negative sign just makes `left` serve as a "max heap". This way ensures that all the `num` in `left` are no greater than all the `num` in `right` as well as the above length condition. This insert takes O(log(n)).
 
-3. Since the `-left[0]` is the largest input value in `left` and `right[0]` is the smallest input value in `right`, the median is simply the average of them `(right[0] - left[0])/2` if len(left) == len(right) else `-left[0]`. This query takes O(1).
+3. Since the `-left[0]` is the largest input value in `left` and `right[0]` is the smallest input value in `right`, the median is simply `(right[0] - left[0])/2 if len(left) == len(right) else -left[0]`. This query takes O(1).
 
 4. This algorithm is wrapped in a class named "MedianFinder" in `~/src/utils/finders/medianfinder.py` along with several naive algorithms which are just for test/debug issue.
 
