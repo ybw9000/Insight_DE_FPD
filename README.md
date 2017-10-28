@@ -1,7 +1,7 @@
 # Table of Contents
-1. [Algorithm summary](README.md#Algorithm-summary)
-2. [Module summary](README.md#Module-summary)
-3. [Unit test](README.md#Unit-test)
+1. [Algorithm summary](README.md#algorithm-summary)
+2. [Module summary](README.md#uodule-summary)
+3. [Unit test](README.md#unit-test)
 4. [Repo directory structure](README.md#repo-directory-structure)
 
 
@@ -21,7 +21,7 @@ The core idea is how to efficiently query the median in a streamed data. This al
 
 For this challenge, I used a `Recorder` class to wrap the above mentioned `MedianFinder` class to record the median, total transactions and total amount streamed in so far. Implementation of total transactions and total amount are trivial. This `Recorder` is under `~/src/utils/recorder.py`.
 
-For every key (CMTE_ID, ZIP_CODE/TRANSACTION_DT), it has a corresponding "Recorder" as its value. In order to make the hierarchy easier to query, instead of using (CMTE_ID, ZIP_CODE/TRANSACTION_DT) as a key, I used two level dictionaries, i.e., defaultdict(lambda : defaultdict(Recorder)). For the first level, CMTE_ID is the key, and a corresponding dictionary is the value, for the second level, ZIP_CODE/TRANSACTION_DT is the key, and a "Recorder" is the value. So at any given time, the median, total transactions and total amount of a particular (CMTE_ID, ZIP_CODE/TRANSACTION_DT) can be queried by dictionary[CMTE_ID][ZIP_CODE/TRANSACTION_DT]. These dictionaries are wrapped in a "Streamer" class in `~/src/find_political_donors.py` or `~/src/utils/streamer.py`.
+For every key (`CMTE_ID`, `ZIP_CODE/TRANSACTION_DT`), it has a corresponding "Recorder" as its value. In order to make the hierarchy easier to query, instead of using (`CMTE_ID`, `ZIP_CODE/TRANSACTION_DT`) as a key, I used two level dictionaries, i.e., defaultdict(lambda : defaultdict(Recorder)). For the first level, `CMTE_ID` is the key, and a corresponding dictionary is the value, for the second level, `ZIP_CODE/TRANSACTION_DT` is the key, and a "Recorder" is the value. So at any given time, the median, total transactions and total amount of a particular (`CMTE_ID`, `ZIP_CODE/TRANSACTION_DT`) can be queried by dictionary[`CMTE_ID`][`ZIP_CODE/TRANSACTION_DT`]. These dictionaries are wrapped in a "Streamer" class in `~/src/find_political_donors.py` or `~/src/utils/streamer.py`.
 
 The work flow is as follows:
 
@@ -31,7 +31,7 @@ The work flow is as follows:
 
 -Check if TRANSACTION_DT is valid. If so, dump the input value into the corresponding "Recorder".
 
--After the streaming is done, sort the keys (CMTE_ID) in the first level dictionary alphabetically, followed by sorting the keys (TRANSACTION_DT) in second level dictionaries chronologically. Then just query the corresponding "Recorder" of each (CMTE_ID, TRANSACTION_DT) and write the result into `medianvals_by_date.txt`.
+-After the streaming is done, sort the keys (`CMTE_ID`) in the first level dictionary alphabetically, followed by sorting the keys (TRANSACTION_DT) in second level dictionaries chronologically. Then just query the corresponding "Recorder" of each (`CMTE_ID`, TRANSACTION_DT) and write the result into `medianvals_by_date.txt`.
 
 These steps are implemented in a "Streamer" class in `~/src/find_political_donors.py` or `~/src/utils/streamer.py`. The code are exactly the same for the "Streamer" class in these two files.
 
@@ -51,13 +51,13 @@ My own test samples are as below:
     -invalid zip: Null
     -invalid zip: digits less than 5
     -invalid zip: contains non-numeric char
-    -invalid input: TRANSACTION_AMT Null
-    -invalid input: CMTE_ID Null
+    -invalid input: `TRANSACTION_AMT` Null
+    -invalid input: `CMTE_ID` Null
 
 `~/insight_testsuite/tests/my_test2`:
     -contains 2 tests, including:
-    -invalid input: TRANSACTION_AMT Null
-    -invalid input: CMTE_ID Null
+    -invalid input: `TRANSACTION_AMT` Null
+    -invalid input: `CMTE_ID` Null
 
 # Repo directory structure
 
