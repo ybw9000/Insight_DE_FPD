@@ -9,7 +9,7 @@
 
 The core idea is how to efficiently query the median in a streamed data. This algorithm uses two heaps to store all the input data and each insert takes O(log(n)) time and each query takes O(1) time, as described below:
 
-1. Initialize two empty heaps ("min heap"), say `left` and `right`. `left` always has the same length of or one more element than `right`, i.e., len(left) = len(right) or len(left) = len(right) + 1. With two empty heaps, this is satisfied.
+1. Initialize two empty heaps ("min heap"), say `left` and `right`. `left` always has the same length of or one more element than `right`, i.e., `len(left) = len(right)` or `len(left) = len(right) + 1`. With two empty heaps, this is satisfied.
 
 2. Each time when a streamed value `num` comes in, we push it into `right` if `len(left) == len(right)`; otherwise we push `-num` into `left`. Then we pop the top element `heap[0]` from that heap and push `-heap[0]` into the other heap. The negative sign just makes `left` serve as a "max heap". This way ensures that all the `num` in `left` are no greater than all the `num` in `right` as well as the above length condition. This insert takes O(log(n)).
 
@@ -36,7 +36,7 @@ The work flow is as follows:
 
 3. Check if `TRANSACTION_DT` is valid. If so, dump the input value into the corresponding "Recorder".
 
-4. After the streaming is done, sort the keys (`CMTE_ID`) in the first level dictionary alphabetically, followed by sorting the keys (TRANSACTION_DT) in second level dictionaries chronologically. Then just query the corresponding "Recorder" of each (`CMTE_ID`, TRANSACTION_DT) and write the result into `medianvals_by_date.txt`.
+4. After the streaming is done, sort the keys (`CMTE_ID`) in the first level dictionary alphabetically, followed by sorting the keys (`TRANSACTION_DT`) in second level dictionaries chronologically. Then just query the corresponding "Recorder" of each (`CMTE_ID`, `TRANSACTION_DT`) and write the result into `medianvals_by_date.txt`.
 
 These steps are implemented in a "Streamer" class in `~/src/find_political_donors.py` or `~/src/utils/streamer.py`. The code are exactly the same for the "Streamer" class in these two files.
 
