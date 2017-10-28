@@ -1,7 +1,7 @@
 # Table of Contents
-1. [Algorithm summary](README.md#Algorithm summary)
-2. [Module summary](README.md#Module summary)
-3. [Unit test](README.md#Unit test)
+1. [Algorithm summary](README.md#Algorithm-summary)
+2. [Module summary](README.md#Module-summary)
+3. [Unit test](README.md#Unit-test)
 4. [Repo directory structure](README.md#repo-directory-structure)
 
 
