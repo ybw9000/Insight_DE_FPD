@@ -1,10 +1,10 @@
 #Uses python3
 
 import sys
-from utils.recorder import Recorder
 from collections import defaultdict
 import time
 import datetime
+import heapq
 
 def main():
     file_dir = sys.argv[1] #input dir
@@ -18,6 +18,72 @@ def main():
     streamer = Streamer()
     zip_dic, date_dic = streamer.stream(fh, zip_file, date_file)
     streamer.process_date(date_dic, date_file)
+
+
+class MedianFinder(object):
+    def __init__(self):
+        """
+        Initialize two heaps.
+        left: list(heap) containing all the values <= median.
+              left has the same length of or one more element than right.
+        right: list(heap) containing all the values >= median
+        Works in O(nlog(n)). Used in implementation.
+        """
+        self.left, self.right = [], []
+
+    def addNum(self, num):
+        """
+        Put the input num into either left or right heap and moves the largest val in left to right
+        or the smallest val in right to left. This makes sure left <= right.
+        input:
+            num: int
+        returns:
+            void
+        """
+        num = float(num)
+        if len(self.left) == len(self.right):
+            heapq.heappush(self.left, -heapq.heappushpop(self.right, num))
+        else:
+            heapq.heappush(self.right, -heapq.heappushpop(self.left, -num))
+
+    def findMedian(self):
+        """
+        :rtype: int
+        """
+        if len(self.left) == len(self.right):
+            return round((self.right[0] - self.left[0])/2)
+        else:
+            return round(-self.left[0])
+
+
+class Recorder(object):
+    def __init__(self):
+        """
+        Initialize a Recorder class which keeps the running median,
+        total transactions, and total amout.
+        """
+        self.total_amt = 0
+        self.total_tran = 0
+        self.median = MedianFinder()
+
+    def record(self, amt):
+        """
+        put the streamed amount into different field.
+        input:
+            amt: float
+        """
+        self.total_amt += amt
+        self.total_tran += 1
+        self.median.addNum(amt)
+
+    def indicate(self):
+        """
+        output the median, total transactions and total amouts so far.
+        returns: tuple of int
+        """
+        return (self.median.findMedian(), self.total_tran,
+                round(self.total_amt))
+
 
 class Streamer(object):
     def __init__(self):

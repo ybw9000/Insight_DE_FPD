@@ -7,7 +7,7 @@
 
 # Algorithm summary
 
-The core idea is how to efficiently query the median in a streamed data. This algorithm uses two heaps to store all the input data and each insert takes O(log(n)) time and each query takes O(1) time, as described below:
+The core idea is how to efficiently query the median in a streamed data. A natural consideration is to use BST, however, for simplicity, this algorithm uses two heaps to store all the input data and each insert takes O(log(n)) time and each query takes O(1) time, as described below:
 
 1. Initialize two empty heaps ("min heap"), say `left` and `right`. `left` always has the same length of or one more element than `right`, i.e., `len(left) = len(right)` or `len(left) = len(right) + 1`. With two empty heaps, this is satisfied.
 
@@ -15,11 +15,11 @@ The core idea is how to efficiently query the median in a streamed data. This al
 
 3. Since the `-left[0]` is the largest input value in `left` and `right[0]` is the smallest input value in `right`, the median is simply `(right[0] - left[0])/2 if len(left) == len(right) else -left[0]`. This query takes O(1).
 
-4. This algorithm is wrapped in a class named "MedianFinder" in `~/src/utils/finders/medianfinder.py` along with several naive algorithms which are just for test/debug issue.
+4. This algorithm is wrapped in a class named "MedianFinder" in `~/src/find_political_donors.py` or `~/src/utils/finders/medianfinder.py` along with several naive algorithms which are just for test/debug issue.
 
 # Module summary
 
-For this challenge, I used a `Recorder` class to wrap the above mentioned `MedianFinder` class to record the median, total transactions and total amount streamed in so far. Implementation of total transactions and total amount are trivial. This `Recorder` is under `~/src/utils/recorder.py`.
+For this challenge, I used a `Recorder` class to wrap the above mentioned `MedianFinder` class to record the median, total transactions and total amount streamed in so far. Implementation of total transactions and total amount are trivial. This `Recorder` is in `~/src/find_political_donors.py` or  `~/src/utils/recorder.py`.
 
 For every key (`CMTE_ID`, `ZIP_CODE/TRANSACTION_DT`), it has a corresponding "Recorder" as its value. In order to make the hierarchy easier to query, instead of using (`CMTE_ID`, `ZIP_CODE/TRANSACTION_DT`) as a key, I used two level dictionaries, i.e., `defaultdict(lambda : defaultdict(Recorder))`:
 
@@ -38,11 +38,13 @@ The work flow is as follows:
 
 4. After the streaming is done, sort the keys (`CMTE_ID`) in the first level dictionary alphabetically, followed by sorting the keys (`TRANSACTION_DT`) in second level dictionaries chronologically. Then just query the corresponding "Recorder" of each (`CMTE_ID`, `TRANSACTION_DT`) and write the result into `medianvals_by_date.txt`.
 
-These steps are implemented in a "Streamer" class in `~/src/find_political_donors.py` or `~/src/utils/streamer.py`. The code are exactly the same for the "Streamer" class in these two files.
+These steps are implemented in a "Streamer" class in `~/src/find_political_donors.py` or `~/src/utils/streamer.py`.
+
+There are two python scripts under `~/src`. They are essentially the same, despite `~/src/find_political_donors.py` has all the self-defined classes and functions in it while `~/src/find_political_donors_main_only.py` contains only the `main` function and import the necessary self-defined classes in the beginning. `run.sh` uses the first one.
 
 # Unit test
 
-I implemented a tester to test the "MedianFinder" works properly and survive stress test by comparing the result from the optimized "MedianFinder" to the naive/brute force algorithms. This tester can be found under `~/src/utils/medianfinder_tester.py`.
+I implemented a tester to test if the "MedianFinder" works properly and survives stress test by comparing the result from the optimized "MedianFinder" to the naive/brute force algorithms. This tester can be found under `~/src/utils/medianfinder_tester.py`.
 
 For the unit tests for the main module, I just wrote several more test cases and test the main module by the provided `~/insight_testsuite/run_tests.sh`.
 
@@ -72,6 +74,7 @@ The directory structure for the repo looks like this:
     ├── run.sh
     ├── src
     │   └── find_political_donors.py
+    |   └── find_political_donors_main_only.py
     |   └── utils
     |       └── recorder.py
     |       └── streamer.py

@@ -1,4 +1,4 @@
-from .finders import medianfinder
+from .finders.medianfinder import MedianFinder
 
 class Recorder(object):
     def __init__(self):
@@ -8,7 +8,7 @@ class Recorder(object):
         """
         self.total_amt = 0
         self.total_tran = 0
-        self.median = medianfinder.MedianFinder()
+        self.median = MedianFinder()
 
     def record(self, amt):
         """
